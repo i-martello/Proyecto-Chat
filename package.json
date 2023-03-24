@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "both-dev": "concurrently \"node api/dist/index.js\" \"npm run start\"",
-    "install": "concurrently \"npm install\" \"npm --prefix /api/ install \""
+    "both-dev": "concurrently \"node api/dist/index.js\" \"npm run start\""
 
   },
   "dependencies": {
