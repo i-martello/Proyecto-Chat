@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "both-dev": "concurrently \"node api/dist/index.js\" \"npm run start\""
-
+    "lint": "next lint"
   },
   "dependencies": {
     "@types/node": "18.15.3",
