@@ -7,7 +7,7 @@
     "dev": "ts-node-dev index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
-    "both-dev": "concurrently \"node dist/index.js\" \"npm --prefix ../frontend/ run start\""
+    "both-dev": "concurrently \"node api/dist/index.js\" \"npm run start\""
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: url('/fondo.jpg');
+}
+
+
+.SCROLLCSS::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+.SCROLLCSS::-webkit-scrollbar-track {
+  background: white;    
+  border-radius: 20px;       /* roundness of the scroll thumb */
+}
+
+.SCROLLCSS::-webkit-scrollbar-thumb {
+  background-color: rgb(152, 152, 152);    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid rgb(152, 152, 152);  /* creates padding around scroll thumb */
+}
