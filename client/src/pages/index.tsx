@@ -14,6 +14,7 @@ interface TypeMessages {
 export default function Home() {
   const [user, setUser] = useState("")
   const [message, setMessage] = useState<string>("");
+  const [lastMessage, setLastMessage] = useState<TypeMessages>()
   const [messages, setMessages] = useState<TypeMessages[]>([]);
 
   useEffect(() => { 
@@ -27,20 +28,24 @@ export default function Home() {
     const receivedMessage = (message: any) => {
       setMessages([...messages, message]);
     };
-    socket.on("message", receivedMessage);
+    console.log(messages);
+    setLastMessage([...messages].pop()!)
+    console.log(lastMessage);
 
+    socket.on("message", receivedMessage);    
     return () => {
       socket.off("message", receivedMessage);
     };
   }, [messages]);
 
+  
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newMessages = { body: message, from: "Me" };
+    console.log(newMessages);
     setMessages([...messages, newMessages]);
     setMessage("");
     socket.emit("message", {message, user});
-    console.log(messages);
   };
 
   return (
@@ -53,7 +58,7 @@ export default function Home() {
               type="text"
               name=""
               id=""
-              placeholder="search IRL"
+              placeholder="Buscar"
               className="rounded-2xl bg-gray-100 py-3 px-5 w-full"
             />
           </div>
@@ -67,21 +72,21 @@ export default function Home() {
             <div className="border-b-2 py-4 px-2">
               <input
                 type="text"
-                placeholder="search chatting"
+                placeholder="Buscar chat"
                 className="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
               />
             </div>
             <div className="flex flex-row py-4 px-2 items-center border-b-2 border-l-4 border-blue-400">
               <div className="w-1/4">
                 <img
-                  src="https://source.unsplash.com/L2cxSuKWbpo/600x600"
+                  src="https://www.pixartprinting.es/blog/wp-content/uploads/2022/11/linguaggi_programmazione.jpg"
                   className="object-cover h-12 w-12 rounded-full"
                   alt=""
                 />
               </div>
               <div className="w-full">
                 <div className="text-lg font-semibold">Grupo de Programación</div>
-                <span className="text-gray-500">Juan: Aprobé algoritmos!</span>
+                <span className="text-gray-500">{lastMessage ? (<span>{lastMessage.from}: {lastMessage.body}</span>) : ""}</span>
               </div>
             </div>
           </div> 
@@ -107,7 +112,7 @@ export default function Home() {
                 <input
                   className="w-full bg-gray-300 py-5 px-3 rounded-xl"
                   type="text"
-                  placeholder="type your message here..."
+                  placeholder="Escribí tus mensajes aca!"
                   onChange={(e) => setMessage(e.target.value)}
                   value={message}
                 />
@@ -119,7 +124,7 @@ export default function Home() {
             <div className="flex flex-col">
               <div className="font-semibold text-xl py-4">Grupo de Programación</div>
               <img
-                src="https://source.unsplash.com/L2cxSuKWbpo/600x600"
+                src="https://www.pixartprinting.es/blog/wp-content/uploads/2022/11/linguaggi_programmazione.jpg"
                 className="object-cover rounded-xl h-64"
                 alt=""
               />
