@@ -91,7 +91,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full h-[90vh] px-5 flex flex-col justify-between">
-            <div className="SCROLLCSS flex flex-col mt-5 overflow-y-auto">
+            <div className="SCROLLCSS flex flex-col-reverse mt-5 overflow-y-auto">
               {messages.map((message: any, index) => {
                 return (
                   <div

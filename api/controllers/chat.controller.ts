@@ -13,7 +13,7 @@ export const ctrlChat: ctrlChatType = {
     res.end();
   },
   getMsg: async (req, res) => {
-    const mensajes = await chatSchema.find();
+    const mensajes = await chatSchema.find().sort({createdAt: -1});    
     res.status(200).json(mensajes);
   }
 };
