@@ -84,7 +84,7 @@ exports.ctrlIndex = {
         var _a;
         const token = (_a = req.cookies) === null || _a === void 0 ? void 0 : _a.token;
         if (!token)
-            return res.json({ msg: "Acceso negado" });
+            return res.json({ msg: "Hola" });
         try {
             const decodedToken = jsonwebtoken_1.default.verify(token, process.env.JWT_KEY);
             return res.json({ decodedToken });

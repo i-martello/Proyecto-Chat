@@ -56,7 +56,7 @@ export const ctrlIndex: ctrlType = {
   },
   validateUser: async (req, res)=>{
     const token = req.cookies?.token;
-    if(!token) return res.json({msg: "Acceso negado"})
+    if(!token) return res.json({msg: "Acceso denegado"})
     try {
       const decodedToken = jwt.verify(token, process.env.JWT_KEY!)
       return res.json({decodedToken}) 
