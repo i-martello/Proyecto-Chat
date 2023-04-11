@@ -21,5 +21,21 @@ Instala mi proyecto con NPM!
   cd client
   npm install
   npm run dev
+  
 ```
-    
+## Environment Variables
+
+Para ejecutar el proyecto, necesitas añadir las variables de entorno correspondientes 
+
+Api
+
+`MONGO_URI`
+
+`JWT_KEY`
+
+Client
+
+`clientId`
+
+
+
