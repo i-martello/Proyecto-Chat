@@ -5,7 +5,6 @@ import indexRouter from './routes/index.routes'
 import chatRouter from './routes/chat.routes'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
-import morgan from 'morgan'
 const app = express()
 
 // Settings
@@ -20,8 +19,7 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cookieParser())
-app.use(morgan('dev'))
+app.use(cookieParser());
 app.use(indexRouter);
 app.use(chatRouter);
 

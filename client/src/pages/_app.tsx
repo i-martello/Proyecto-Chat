@@ -5,9 +5,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export default function App({ Component, pageProps }: AppProps) {
+
+  const client = process.env.clientId!
+  console.log(client);
+  
+
   const router = useRouter();
   useEffect(() => {
     (async () => {
@@ -15,7 +20,6 @@ export default function App({ Component, pageProps }: AppProps) {
         withCredentials: true,
       });
       if (res.data.msg) {
-        console.log(res.data.msg);
         if (router.pathname !== "/register") {
           router.push("/login");
           return;
@@ -26,10 +30,10 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <>
-      <Component {...pageProps} />
-      <ToastContainer />
+      <GoogleOAuthProvider clientId={client}>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </GoogleOAuthProvider>
     </>
   );
 }
-
-

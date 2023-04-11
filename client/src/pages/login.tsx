@@ -1,11 +1,11 @@
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import GoogleLogin from '../components/GoogleLogin'
 
 const Login = () => {
-
   const router = useRouter();
 
   const [message, setMessage] = useState("");
@@ -15,6 +15,7 @@ const Login = () => {
     register,
     formState: { errors },
   } = useForm();
+
 
   const onSubmit = (data: FieldValues) => {
     const { user, password } = data;
@@ -28,14 +29,14 @@ const Login = () => {
       )
       .then((res) => {
         const {
-          data: { error, success},
+          data: { error, success },
         } = res;
-        if(success){
-          return router.push('/')
+        if (success) {
+          return router.push("/");
         }
         error && setMessage(error);
       });
-  };
+  };  
 
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
@@ -96,6 +97,9 @@ const Login = () => {
             Registrarse
           </Link>
         </p>
+        <div className="flex justify-center m-2">
+            <GoogleLogin />
+        </div>
       </div>
     </div>
   );

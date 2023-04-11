@@ -1,6 +1,8 @@
 import axios from "axios";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { googleLogout } from "@react-oauth/google";
 import io from "socket.io-client";
+import { useRouter } from "next/router";
 
 const socket = io("http://localhost:5000");
 
@@ -10,7 +12,10 @@ interface TypeMessages {
 }
 
 export default function Home() {
+  const router = useRouter();
+
   const [user, setUser] = useState("");
+  const [img, setImg] = useState("");
   const [message, setMessage] = useState<string>("");
   const [lastMessage, setLastMessage] = useState<TypeMessages>();
   const [messages, setMessages] = useState([]);
@@ -20,29 +25,38 @@ export default function Home() {
       const res = await axios.get("http://localhost:5000/validate", {
         withCredentials: true,
       });
-      setUser(res.data.decodedToken.user);
-      const mensajes = await axios.get('http://localhost:5000/chat')
-        setMessages(mensajes.data);
-    })();    
+      setImg(res.data.decodedToken?.img);
+      setUser(res.data.decodedToken?.user);
+      const mensajes = await axios.get("http://localhost:5000/chat");
+      setMessages(mensajes.data);
+    })();
     setLastMessage([...messages].pop()!);
-    socket.on("message",()=> messages);
+    socket.on("message", () => messages);
     return () => {
-      socket.off("message",()=> messages);
+      socket.off("message", () => messages);
     };
-
   }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await axios.post('http://localhost:5000/chat', {message, user});
+    await axios.post("http://localhost:5000/chat", { message, user });
     socket.emit("message", { message, user });
-  };  
+  };
+
+  const logout = async () => {
+    googleLogout();
+    const res = await axios.get('http://localhost:5000/logout', {withCredentials: true})
+    if(res.data.success){
+      router.push('/login')
+    }
+    
+  };
 
   return (
     <>
       <div className=" flex flex-col shadow-lg rounded-lg h-screen">
         <div className="px-5 py-5 flex justify-between items-center bg-white border-b-2">
-          <div className="font-semibold text-2xl">Chat Proyecto</div>
+          <div className="font-semibold text-2xl mr-[10%]">Chat Proyecto</div>
           <div className="w-1/2">
             <input
               type="text"
@@ -52,8 +66,24 @@ export default function Home() {
               className="rounded-2xl bg-gray-100 py-3 px-5 w-full"
             />
           </div>
-          <div className="h-12 w-12 p-2 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center">
-            RA
+          <button
+            className="text-gray-900 bg-white border border-black focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg px-5 py-2.5 mr-2  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            onClick={logout}
+          >
+            Cerrar Sesión
+          </button>
+          <div className="flex items-center">
+            <label className="">{user}</label>
+            <div className="h-12 w-12 p-2 flex items-center justify-center">
+              <img
+                className="rounded-full"
+                src={
+                  img ||
+                  "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"
+                }
+                alt=""
+              />
+            </div>
           </div>
         </div>
 
@@ -97,7 +127,7 @@ export default function Home() {
                   <div
                     key={index}
                     className={
-                      message.user === user 
+                      message.user === user
                         ? "flex justify-end mb-4"
                         : "flex justify-start mb-4"
                     }
@@ -110,7 +140,10 @@ export default function Home() {
                       {message.user}: {message.message}
                     </div>
                     <img
-                      src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
+                      src={
+                        img ||
+                        "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_640.png"
+                      }
                       className="object-cover h-8 w-8 rounded-full"
                       alt=""
                     />

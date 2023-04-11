@@ -3,8 +3,10 @@ import bcryptjs from "bcryptjs";
 
 const userSchema = new Schema(
   {
-    user: { type: String, required: true, trim: true },
-    password: { type: String, required: true },
+    user: { type: String, trim: true },
+    password: { type: String},
+    googleUser: {type: String},
+    img: {type: String}
   },
   {
     timestamps: true,
