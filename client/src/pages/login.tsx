@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
-import GoogleLogin from '../components/GoogleLogin'
+import GoogleLogin from "../components/GoogleLogin";
 
 const Login = () => {
   const router = useRouter();
@@ -15,7 +15,6 @@ const Login = () => {
     register,
     formState: { errors },
   } = useForm();
-
 
   const onSubmit = (data: FieldValues) => {
     const { user, password } = data;
@@ -32,11 +31,12 @@ const Login = () => {
           data: { error, success },
         } = res;
         if (success) {
-          return router.push("/");
+          router.push("/");
+          return;
         }
         error && setMessage(error);
       });
-  };  
+  };
 
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
@@ -98,7 +98,7 @@ const Login = () => {
           </Link>
         </p>
         <div className="flex justify-center m-2">
-            <GoogleLogin />
+          <GoogleLogin />
         </div>
       </div>
     </div>

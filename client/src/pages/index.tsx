@@ -21,35 +21,45 @@ export default function Home() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+
+    const receiveMessages = (msg: any) => {
+      setMessages(msg);
+    }
+
+    socket.on("message", receiveMessages);
+
     (async () => {
       const res = await axios.get("http://localhost:5000/validate", {
         withCredentials: true,
       });
       setImg(res.data.decodedToken?.img);
       setUser(res.data.decodedToken?.user);
+    })();
+    setLastMessage([...messages].pop()!);
+
+
+  }, [messages]);
+
+  useEffect(() => {
+    (async () => {
       const mensajes = await axios.get("http://localhost:5000/chat");
       setMessages(mensajes.data);
     })();
-    setLastMessage([...messages].pop()!);
-    socket.on("message", () => messages);
-    return () => {
-      socket.off("message", () => messages);
-    };
-  }, [messages]);
+  },[]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await axios.post("http://localhost:5000/chat", { message, user });
     socket.emit("message", { message, user });
   };
 
   const logout = async () => {
     googleLogout();
-    const res = await axios.get('http://localhost:5000/logout', {withCredentials: true})
-    if(res.data.success){
-      router.push('/login')
+    const res = await axios.get("http://localhost:5000/logout", {
+      withCredentials: true,
+    });
+    if (res.data.success) {
+      router.push("/login");
     }
-    
   };
 
   return (
