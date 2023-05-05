@@ -13,16 +13,14 @@ const io = new SocketServer(server, {
 
 io.on("connection", (socket) => {
   console.log("conectado a socket.io");
-  
+
   socket.on("message", async (object) => {
     // Guardar el mensaje en la base de datos de manera asincrónica
-    new chatModel({ message: object.message, user: object.user }).save();
-;
-    
+    await new chatModel({ message: object.message, user: object.user }).save();
     // Obtener todos los mensajes de la base de datos
-    const mensajes = await chatModel.find().sort({createdAt: -1});        
+    const mensajes = await chatModel.find().sort({ createdAt: -1 });
     // Emitir el mensaje a todos los clientes conectados
-    socket.broadcast.emit("message", mensajes);
+    io.emit("message", mensajes);
   });
 });
 

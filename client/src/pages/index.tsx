@@ -37,6 +37,9 @@ export default function Home() {
     })();
     setLastMessage([...messages].pop()!);
 
+    return () => {
+      socket.off("message", receiveMessages);
+    }
 
   }, [messages]);
 
@@ -50,6 +53,7 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     socket.emit("message", { message, user });
+    setMessage("");
   };
 
   const logout = async () => {
